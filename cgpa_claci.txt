@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CGPA Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        .calculator {
+            text-align: center;
+            margin: 20px auto;
+            max-width: 300px;
+        }
+
+        #input {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 4px solid #ccc;
+            border-radius: 4px;
+        }
+
+        #result {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        #marks-list {
+            text-align: left;
+        }
+
+        .number-button {
+            display: inline-block;
+            width: 30px;
+            height: 30px;
+            background-color: #007BFF;
+            color: #fff;
+            font-size: 16px;
+            text-align: center;
+            border: none;
+            border-radius: 50%;
+            margin: 3px;
+            
+        }
+    </style>
+</head>
+<body>
+    <div class="calculator">
+        <h1>CGPA Calculator</h1>
+        <p>Enter your subject marks:</p>
+        <input type="text" id="input" placeholder="Enter marks and press +">
+        <div id="result">CGPA: 0.00</div>
+        <div id="marks-list">
+            <p>Entered Marks:</p>
+            <ul id="marks-ul"></ul>
+        </div>
+        <div id="number-buttons">
+            <button class="number-button" onclick="addNumber(1)">1</button>
+            <button class="number-button" onclick="addNumber(2)">2</button>
+            <button class="number-button" onclick="addNumber(3)">3</button>
+            <button class="number-button" onclick="addNumber(4)">4</button>
+            <button class="number-button" onclick="addNumber(5)">5</button>
+            <button class="number-button" onclick="addNumber(6)">6</button>
+            <button class="number-button" onclick="addNumber(7)">7</button>
+            <button class="number-button" onclick="addNumber(8)">8</button>
+            <button class="number-button" onclick="addNumber(9)">9</button>
+            <button class="number-button" onclick="addSymbol('+')">+</button>
+            <button class="number-button" onclick="clearText()">CE</button>
+            <button class="number-button" onclick="clearAllMarks()">C</button> 
+        </div>
+    </div>
+
+    <script>
+        const input = document.getElementById("input");
+        const result = document.getElementById("result");
+        const marksList = document.getElementById("marks-ul");
+
+        let totalMarks = 0;
+        let subjectsCount = 0;
+        let marksEntered = [];
+
+        input.addEventListener("keydown", function(event) {
+            if (event.key === "Enter" || event.key === "+") {
+                event.preventDefault(); // Prevent the + symbol from being added to the input
+
+                const marks = parseFloat(input.value);
+                if (!isNaN(marks)) {
+                    totalMarks += marks;
+                    subjectsCount++;
+                    marksEntered.push(marks);
+                    updateMarksList();
+                    const cgpa = calculateCGPA(totalMarks, subjectsCount);
+                    result.textContent = `CGPA: ${cgpa}`;
+                    input.value = "";
+                }
+            }
+        });
+
+        function updateMarksList() {
+            marksList.innerHTML = "";
+            marksEntered.forEach(mark => {
+                const li = document.createElement("li");
+                li.textContent = mark;
+                marksList.appendChild(li);
+            });
+        }
+
+        function addNumber(number) {
+            input.value += number;
+        }
+
+        function addSymbol(symbol) {
+            input.value += symbol;
+        }
+
+        function clearText() {
+            input.value = "";
+        }
+
+        function calculateCGPA(totalMarks, subjectsCount) {
+            if (subjectsCount === 0) {
+                return 0.00;
+            }
+
+            if (totalMarks >= 90 * subjectsCount) {
+                return (10).toFixed(2);
+            } else if (totalMarks >= 80 * subjectsCount) {
+                return (9).toFixed(2);
+            } else if (totalMarks >= 70 * subjectsCount) {
+                return (8).toFixed(2);
+            } else if (totalMarks >= 60 * subjectsCount) {
+                return (7).toFixed(2);
+            } else if (totalMarks >= 50 * subjectsCount) {
+                return (6).toFixed(2);
+            } else if (totalMarks >= 40 * subjectsCount) {
+                return (4).toFixed(2);
+            } else {
+                return (0).toFixed(2);
+            }
+        }
+        function clearAllMarks() {
+        input.value = "";
+        totalMarks = 0;
+        subjectsCount = 0;
+        marksEntered = [];
+        result.textContent = "CGPA: 0.00";
+        marksList.innerHTML = "";
+}
+    </script>
+</body>
+</html>
